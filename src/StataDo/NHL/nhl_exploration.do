@@ -22,10 +22,29 @@ drop if position=="G"
 
 
 reg years_played rv drv d
-stop
+
 collapse (mean) years_played gpg ppg, by(rv)
 
-twoway (scatter years_played rv if rv<13&rv>=-14)(lfit years_played rv if rv>=-14&rv<0) (lfit years_played rv if rv>=0&rv<13)
+twoway (scatter years_played rv if rv<13&rv>=-14)(lfit years_played rv if rv>=-14&rv<=0) (lfit years_played rv if rv>0&rv<13)
+
+restore
+
+preserve
+
+drop if year>2010
+keep if rv>= -8 & rv<=8
+collapse scaled_years, by(rv)
+
+twoway (scatter scaled_years rv)(lfit scaled_years rv if rv<=0)(lfit scaled_years rv if rv>0)
+
+restore
+
+preserve
+
+drop if year>2010
+collapse scaled_years, by(rv)
+
+twoway (scatter scaled_years rv)(lfit scaled_years rv if rv<=0)(lfit scaled_years rv if rv>0)
 
 restore
 
@@ -40,9 +59,16 @@ restore
 
 preserve
 
-drop if round==2
+drop if year>=2010 | year<=1998
 collapse (mean) scaled_years, by(dist_round)
-scatter scaled_years dist_round, xline(0) xline(-7)
+scatter scaled_years dist_round, xline(0) 
+
+restore
+
+preserve
+
+collapse (mean) scaled_years, by(pick)
+scatter scaled_years pick, xline(0) 
 
 restore
 
