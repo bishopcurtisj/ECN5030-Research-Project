@@ -1,15 +1,27 @@
 clear all
+cls
 use "..\..\..\Data\stata-files\nhl_draft.dta"
 
-reg age_of_retirement dist_round i.round DxDist_Round i.position_code D
+reg years_played rv i.round drv i.position_code d if rv<=14 & rv>=-14 & year<=2010,r
 
-reg years_played dist_round i.round DxDist_Round i.position_code D
+reg games_played rv i.round drv i.position_code d if rv<=14 & rv>=-14 & year<=2010,r
 
-reg games_played dist_round i.round DxDist_Round i.position_code D
+reg age_of_retirement rv drv i.round i.position_code d if rv<=14 & rv>=-14 & year<=2010,r
 
-reg scaled_games_played dist_round DxDist_Round D
 
-predict ypred
+rdbwselect years_played rv, kernel(uniform)
+rdbwselect years_played rv, kernel(uniform)
+rdbwselect years_played rv, kernel(uniform)
+
+cls
+reg years_played rv i.round drv i.position_code d if rv<=2.78 & rv>=-2.78 & year<=2010,r
+
+reg games_played rv i.round drv i.position_code d if rv<=2.78 & rv>=-2.78 & year<=2010,r
+
+reg age_of_retirement rv drv i.round i.position_code d if rv<=2.78 & rv>=-2.78 & year<=2010,r
+
+
+
 
 preserve
 drop if year>2010

@@ -1,33 +1,47 @@
 clear all
+cls
 use "..\..\..\Data\stata-files\nhl_draft.dta"
 
-preserve 
-collapse (mean) scaled_years, by(D dist_round)
-scatter scaled_years D
+
+preserve
+keep if year<=2010
+keep if rv<=8 & rv>=-8
+
+collapse (mean) scaled_years d, by(rv)
+
+twoway (scatter scaled_years rv if d==0, mc(red)) (scatter scaled_years rv if d==1, mc(blue)) (lfit scaled_years rv if d==0, lc(red)) (lfit scaled_years rv if d==1, lc(blue))
+
+restore
+
+preserve
+keep if year<=2010
+keep if rv<=8 & rv>=-8
+
+collapse (mean) position_code d, by(rv)
+
+twoway (scatter position_code rv if d==0, mc(red)) (scatter position_code rv if d==1, mc(blue)) (lfit position_code rv if d==0, lc(red)) (lfit position_code rv if d==1, lc(blue))
+
+restore
+
+preserve
+keep if year<=2010
+keep if rv<=8 & rv>=-8
+
+collapse (mean) age d, by(rv)
+
+twoway (scatter age rv if d==0, mc(red)) (scatter age rv if d==1, mc(blue)) (lfit age rv if d==0, lc(red)) (lfit age rv if d==1, lc(blue))
 
 restore
 
 
 preserve
 keep if year <=2010
-collapse (mean) scaled_years scaled_age_of_retirement scaled_games_played, by(dist_round)
-twoway (scatter scaled_years dist_round, mc(yellow)) (scatter scaled_age_of_retirement dist_round, mc(blue)) (scatter scaled_games_played dist_round, mc(red)), xline(0)
+collapse (mean) scaled_years scaled_age_of_retirement scaled_games_played, by(rv)
+twoway (scatter scaled_years rv, mc(yellow)) (scatter scaled_age_of_retirement rv, mc(blue)) (scatter scaled_games_played rv, mc(red)), xline(0)
 
 restore
 
-preserve
-drop if year>2010
 
-drop if position=="G"
-
-
-reg years_played rv drv d
-
-collapse (mean) years_played gpg ppg, by(rv)
-
-twoway (scatter years_played rv if rv<13&rv>=-14)(lfit years_played rv if rv>=-14&rv<=0) (lfit years_played rv if rv>0&rv<13)
-
-restore
 
 preserve
 
@@ -39,86 +53,6 @@ twoway (scatter scaled_years rv)(lfit scaled_years rv if rv<=0)(lfit scaled_year
 
 restore
 
-preserve
-
-drop if year>2010
-collapse scaled_years, by(rv)
-
-twoway (scatter scaled_years rv)(lfit scaled_years rv if rv<=0)(lfit scaled_years rv if rv>0)
-
-restore
-
-preserve
-keep if year<=2010
-keep if (position != "G") & (position!= "D")
-collapse (mean) goals, by(dist_round)
-scatter goals dist_round, xline(0)
-
-restore
-
-
-preserve
-
-drop if year>=2010 | year<=1998
-collapse (mean) scaled_years, by(dist_round)
-scatter scaled_years dist_round, xline(0) 
-
-restore
-
-preserve
-
-collapse (mean) scaled_years, by(pick)
-scatter scaled_years pick, xline(0) 
-
-restore
-
-preserve
-
-collapse (mean) pos_years, by(dist_round)
-scatter pos_years dist_round, xline(0)
-
-restore
 
 
 
-preserve
-
-collapse (median) years_played, by(dist_round)
-scatter years_played dist_round, xline(0)
-
-restore
-
-preserve
-
-collapse (mean) age_of_retirement, by(dist_round)
-scatter age_of_retirement dist_round, xline(0)
-
-restore
-preserve
-
-collapse (median) age_of_retirement, by(dist_round)
-scatter age_of_retirement dist_round, xline(0)
-
-restore
-
-preserve
-collapse (median) years_played, by(pick)
-line(years_played pick)
-
-restore
-
-preserve
-collapse (mean) years_played, by(overall_pick)
-scatter (years_played overall_pick)
-restore
-
-preserve
-
-keep if round==2 | round == 3
-drop if round==2 & D==1
-drop if round==3 & D==0
-
-collapse (mean) games_played, by(dist_round)
-line (games_played dist_round), xline(0)
-
-restore
