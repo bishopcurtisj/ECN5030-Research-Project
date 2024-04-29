@@ -26,6 +26,7 @@ restore
 preserve
 keep if year<=2010
 keep if rv<=8 & rv>=-8
+drop if age==0
 
 collapse (mean) age d, by(rv)
 
