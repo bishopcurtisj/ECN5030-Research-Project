@@ -2,6 +2,10 @@ clear all
 cls
 use "..\..\..\Data\stata-files\nhl_draft.dta"
 
+reg position_code rv i.round drv d if rv<=14 & rv>=-14 & year<=2010,r
+
+reg age rv drv i.round i.position_code d if rv<=14 & rv>=-14 & year<=2010,r
+
 reg years_played rv i.round drv i.position_code d if rv<=14 & rv>=-14 & year<=2010,r
 
 reg games_played rv i.round drv i.position_code d if rv<=14 & rv>=-14 & year<=2010,r

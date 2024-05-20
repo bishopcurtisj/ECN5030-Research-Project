@@ -23,7 +23,8 @@ rdbwselect age_of_retirement rv, kernel(uniform)
 rdbwselect games rv, kernel(uniform)
 rdbwselect seasons_started rv, kernel(uniform)*/
 
-
+reg age rv i.round drv i.position_code d if rv<=16 & rv>=-16 & season<=2013, r
+reg position_code rv i.round drv  d if rv<=16 & rv>=-16 & season<=2013, r
 
 
 
